@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_insta_clone/insta_stories.dart';
 
 class InstaList extends StatelessWidget {
+    static List<String> images = [
+    "https://images.pexels.com/photos/257360/pexels-photo-257360.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    "https://www.opencollege.info/wp-content/uploads/2016/02/relaxation-skills.jpg",
+    "https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823__340.jpg",
+    "https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    "https://petrieflom.law.harvard.edu/images/made/82e033b5d85a88b0/Cohen2015_people_300_300_85.jpg"
+  ];
+
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+
+//    const _baseColors = <ColorSwatch>[
+//      ColorSwatch(0xffffffff, {'color1': Color(0xFFFFFFF),'color2': Color(0xFFFFFFF)})
+//    ];
+//   var _color = _baseColors[0];
+
     return ListView.builder(
       itemCount: 5,
       itemBuilder: (context, index) => index == 0
@@ -55,7 +68,7 @@ class InstaList extends StatelessWidget {
                 Flexible(
                   fit: FlexFit.loose,
                   child: new Image.network(
-                    "https://images.pexels.com/photos/672657/pexels-photo-672657.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                    images[index],
                     fit: BoxFit.cover,
                   ),
                 ),

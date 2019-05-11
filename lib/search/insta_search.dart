@@ -12,11 +12,17 @@ class InstaSearch extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(0.0),
         child: new TextField(
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300),
           decoration: InputDecoration(
-            filled: true,
-            border: InputBorder.none,
-            hintText: 'Search',
+              hintText: "Search",
+              hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.black)
           ),
+          textInputAction: TextInputAction.search,
+//          decoration: InputDecoration(
+//            filled: true,
+//            border: InputBorder.none,
+//            hintText: 'Search',
+//          ),
         ),
       ),
     ),

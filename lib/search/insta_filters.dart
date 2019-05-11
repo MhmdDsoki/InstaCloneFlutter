@@ -16,31 +16,33 @@ class InstaFilters extends StatelessWidget {
   ];
 
   final tags = Expanded(
-    child: new Padding(
-      padding: const EdgeInsets.only(top: 2.0),
-      child: new ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return new GestureDetector(
-            onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => InstaProfile()),
-                ),
-            child:
-                new Stack(alignment: Alignment.bottomRight, children: <Widget>[
-              new Container(
-                height: 30.0,
-                child: OutlineButton(
-                  textColor: Colors.black,
-                  child: Text(texts[index]), onPressed: () {},
-                ),
+    child: Center(
+      child: new Padding(
+        padding: const EdgeInsets.only(top: 2.0),
+        child: new ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return new GestureDetector(
+              onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => InstaProfile()),
+                  ),
+              child:
+                  new Stack(alignment: Alignment.bottomRight, children: <Widget>[
+                new Container(
 
-                margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              ),
-            ]),
-          );
-        },
+                  child: OutlineButton(
+                    textColor: Colors.black,
+                    child: Text(texts[index]), onPressed: () {},
+                  ),
+
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                ),
+              ]),
+            );
+          },
+        ),
       ),
     ),
   );

@@ -55,7 +55,7 @@ class _MainFetchDataState extends State<FirstScreen> {
                             height: 70.0,
                             width: 70.0,
                             fit: BoxFit.cover,
-                            placeholder: ("assets/images/insta_logo.png"),
+                            placeholder: ("assets/images/placeholder.png"),
                             image: list[index].thumbnailUrl));
 //                        Image.network(
 //                          list[index].thumbnailUrl,

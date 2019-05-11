@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/insta_home.dart';
+import 'package:flutter_insta_clone/pages/login.dart';
 import 'package:flutter_insta_clone/search/insta_search.dart';
 import 'package:flutter_insta_clone/util/InstaColors.dart';
 
@@ -9,13 +10,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appName = 'Instagram';
+
     return new MaterialApp(
       title: appName,
       debugShowCheckedModeBanner: true,
       theme: _buildThemeData(),
+      initialRoute: '/login',
+      onGenerateRoute: _getRoute,
       home: new InstaHomeState(),
     );
   }
+}
+
+Route<dynamic> _getRoute(RouteSettings settings) {
+  if (settings.name != '/login') {
+    return null;
+  }
+
+  return MaterialPageRoute<void>(
+    settings: settings,
+    builder: (BuildContext context) => LoginPage(),
+    fullscreenDialog: true,
+  );
 }
 
 ThemeData _buildThemeData() {
@@ -23,6 +39,7 @@ ThemeData _buildThemeData() {
   return base.copyWith(
     primaryColor: primaryColor,
     accentColor: accentColor,
+    textTheme:_buildTextTheme(base.textTheme, Colors.black) ,
     primaryIconTheme: IconThemeData(color: Colors.black),
     buttonTheme: _buildButtonTheme(base.buttonTheme, accentColor),
     primaryTextTheme: _buildTextTheme(base.textTheme, Colors.black),
@@ -63,13 +80,11 @@ class _InstaHomeState extends State<InstaHomeState> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     _definePages();
 
     return Scaffold(
-
         body: _selectedContent ?? _pages[_bottomIndex],
         bottomNavigationBar: new Container(
           color: Colors.white,

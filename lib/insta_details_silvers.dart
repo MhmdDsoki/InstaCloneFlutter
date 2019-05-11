@@ -1,8 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/InstaStoriesInDetails.dart';
 import 'package:flutter_insta_clone/_grid_screen.dart';
+import 'package:flutter_insta_clone/models/imageObj.dart';
+import 'package:flutter_insta_clone/util/Constans.dart';
+import 'package:http/http.dart' as http;
 
-class InstaDetails extends StatelessWidget {
+import 'models/imageObj.dart';
+
+class InstaDetailsSilvers extends StatefulWidget {
   static double _value = 0.5;
 
   static final textContainer = new Column(
@@ -90,14 +97,22 @@ class InstaDetails extends StatelessWidget {
     ],
   );
 
+  @override
+  _InstaDetailsSilversState createState() => _InstaDetailsSilversState();
+}
+
+List<imageObj> list = List();
+var isLoading = false;
+
+class _InstaDetailsSilversState extends State<InstaDetailsSilvers> {
   final topView = Column(
     children: <Widget>[
       new Container(
         child: new Row(
           children: <Widget>[
-            textContainer,
+            InstaDetailsSilvers.textContainer,
             Expanded(
-              child: imageContainer,
+              child: InstaDetailsSilvers.imageContainer,
             )
           ],
         ),
@@ -130,22 +145,86 @@ class InstaDetails extends StatelessWidget {
         ],
       ),
       InstaStoriesInDetails(),
-      new Container(
-        margin: const EdgeInsets.all(0.0),
-        height: 220,
-        child: MyTabsPage(),
-      )
+//      new Container(
+//        margin: const EdgeInsets.all(0.0),
+//        height: 220,
+//        child: MyTabsPage(),
+//      )
     ],
   );
 
   @override
-  Widget build(BuildContext context) {
-    return new SingleChildScrollView(
-      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        topView,
-      ]),
-    );
+  void initState() {
+    super.initState();
+    _fetchData();
   }
+
+  _fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+    final response =
+        await http.get(Constants.BASE_API_URL + Constants.GRID_URL);
+    if (response.statusCode == 200) {
+      list = (json.decode(response.body) as List)
+          .map((data) => new imageObj.fromJson(data))
+          .toList();
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      throw Exception('Failed to load photos');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : _silvers(context, topView));
+//    new SingleChildScrollView(
+//      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+//        topView,
+//      ]),
+//    );
+  }
+}
+
+Widget _silvers(BuildContext context, Column topView) {
+  return Container(
+    child: CustomScrollView(
+      slivers: <Widget>[
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              topView,
+
+            ],
+          ),
+        ),
+        SliverGrid(
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return Container(
+                  padding: EdgeInsets.all(1),
+                  child: FadeInImage.assetNetwork(
+                      height: 70.0,
+                      width: 70.0,
+                      fit: BoxFit.cover,
+                      placeholder: ("assets/images/placeholder.png"),
+                      image: list[index].thumbnailUrl));
+            },
+            childCount: list.length,
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class MyTabsPage extends StatelessWidget {

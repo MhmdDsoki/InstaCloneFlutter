@@ -24,72 +24,199 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          children: <Widget>[
-            SizedBox(height: 80.0),
-            Column(
+  Widget _getContent() {
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
               children: <Widget>[
-                Image.asset('assets/diamond.png'),
-                SizedBox(height: 16.0),
-                Text('SHRINE'),
-              ],
-            ),
-            SizedBox(height: 120.0),
-            // TODO: Wrap Username with AccentColorOverride (103)
-            // TODO: Remove filled: true values (103)
-            // TODO: Wrap Password with AccentColorOverride (103)
-            // TODO: Add TextField widgets (101)
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                filled: true,
-                labelText: 'Username',
-              ),
-            ),
-// spacer
-            SizedBox(height: 12.0),
-// [Password]
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                filled: true,
-                labelText: 'Password',
-              ),
-              obscureText: true,
-            ),
-            // TODO: Add button bar (101)
-            ButtonBar(
-              // TODO: Add a beveled rectangular border to CANCEL (103)
-              children: <Widget>[
-                // TODO: Add buttons (101)
+                SizedBox(height: 10.0),
 
-                FlatButton(
-                  child: Text('CANCEL'),
-                  onPressed: () {
-                    _usernameController.clear();
-                    _passwordController.clear();
-                    // TODO: Clear the text fields (101)
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "English (United Stated)",
+                      style: TextStyle(color: Colors.grey[200]),
+                    ),
+                    Icon(Icons.arrow_drop_down)
+                  ],
                 ),
-                // TODO: Add an elevation to NEXT (103)
-                // TODO: Add a beveled rectangular border to NEXT (103)
-                RaisedButton(
-                  child: Text('NEXT'),
+
+                SizedBox(height: 10.0),
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: Image.asset('assets/images/insta_logo.png'),
+                    ),
+                    SizedBox(height: 16.0),
+                  ],
+                ),
+                SizedBox(height: 20.0),
+
+                TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: 'Username',
+                  ),
+                ),
+
+                SizedBox(height: 12.0),
+
+                TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: 'Password',
+                  ),
+                  obscureText: true,
+                ),
+                SizedBox(height: 12.0),
+                OutlineButton(
+                  child: Text("Log in"),
+                  textColor: Colors.grey[200],
                   onPressed: () {
                     // TODO: Show the next page (101)
                     Navigator.pop(context);
                   },
                 ),
+                SizedBox(height: 12.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "fogot your login details?",
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 10,
+                          color: Colors.grey[200]),
+                    ),
+                    SizedBox(width: 5.0),
+                    Text(
+                      "Get help siging in.",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                          color: Colors.grey[200]),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: Divider(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      "  OR  ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        color: Colors.grey[200],
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: Image.asset('assets/images/fblogo.png')),
+                      ),
+                    ),
+                    Text(
+                      " Log in with facebook",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: Colors.grey[200]),
+                    ),
+                  ],
+                ),
+
+                // TODO: Add button bar (101)
               ],
             ),
-          ],
-        ),
+          ),
+          Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Divider(),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Do you have an account? ",
+                          style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 10,
+                              color: Colors.grey[200]),
+                        ),
+                        Text(
+                          "Sign up",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                              color: Colors.grey[200]),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Scaffold(
+          body: new Container(
+            decoration: new BoxDecoration(
+              gradient: new LinearGradient(
+                  colors: [
+                    Colors.green[200],
+                    Colors.blue[200],
+                  ],
+                  begin: const FractionalOffset(0.0, 0.0),
+                  end: const FractionalOffset(0.1, 1.0),
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp),
+            ),
+            child: _getContent() /* add child content here */,
+          ),
+        ),
+      ],
     );
   }
 }
