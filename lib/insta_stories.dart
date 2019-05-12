@@ -63,6 +63,7 @@ class _InstaStoriesState extends State<InstaStories> {
       )
     ],
   );
+
   static setImage(int index) {
     return new Stack(
       alignment: Alignment.bottomRight,
@@ -81,20 +82,21 @@ class _InstaStoriesState extends State<InstaStories> {
         ),
         index == 0
             ? Positioned(
-            right: 10.0,
-            child: new CircleAvatar(
-              backgroundColor: Colors.blueAccent,
-              radius: 10.0,
-              child: new Icon(
-                Icons.add,
-                size: 14.0,
-                color: Colors.white,
-              ),
-            ))
+                right: 10.0,
+                child: new CircleAvatar(
+                  backgroundColor: Colors.blueAccent,
+                  radius: 10.0,
+                  child: new Icon(
+                    Icons.add,
+                    size: 14.0,
+                    color: Colors.white,
+                  ),
+                ))
             : new Container()
       ],
     );
   }
+
   final stories = Expanded(
     child: new Padding(
       padding: const EdgeInsets.only(top: 0.0),
@@ -103,20 +105,16 @@ class _InstaStoriesState extends State<InstaStories> {
         itemCount: 5,
         itemBuilder: (context, index) {
           return new GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => InstaProfile()),
-              ),
               child: new Column(
-                children: <Widget>[
-                  setImage(index),
-
-                ],
-              ));
+            children: <Widget>[
+              setImage(index),
+            ],
+          ));
         },
       ),
     ),
   );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

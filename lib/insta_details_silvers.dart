@@ -10,92 +10,103 @@ import 'package:http/http.dart' as http;
 import 'models/imageObj.dart';
 
 class InstaDetailsSilvers extends StatefulWidget {
-  static double _value = 0.5;
+  static String userimage, username;
 
-  static final textContainer = new Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      new Row(
-        children: <Widget>[
-          Text(
-            "M.Sayed",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          )
-        ],
-      ),
-      new SizedBox(
-        height: 15.0,
-      ),
-      new Row(
-        children: <Widget>[
-          Text(
-            "Global Citizen ",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Image.asset("assets/images/earth.png")
-        ],
-      ),
-      new Row(
-        children: <Widget>[
-          Text(
-            "http://abc.com",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
-          )
-        ],
-      ),
-      new SizedBox(
-        height: 15.0,
-      ),
-      new Row(
-        children: <Widget>[
-          Text(
-            "1,200 ",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "Followers",
-            style: TextStyle(fontWeight: FontWeight.normal),
-          ),
-          Text(
-            "380 ",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "Following",
-            style: TextStyle(fontWeight: FontWeight.normal),
-          ),
-        ],
-      ),
-      new Row(
-        children: <Widget>[
-          Text(
-            "Followed by sadjskn and lkdjsan",
-            style: TextStyle(fontWeight: FontWeight.normal, color: Colors.grey),
-          )
-        ],
-      ),
-    ],
-  );
+  InstaDetailsSilvers(String userimage1, String username1) {
+    userimage = userimage1;
+    username = username1;
+  }
 
-  static final imageContainer = new Column(
-    children: <Widget>[
-      Center(
-        child: Container(
-          width: 80.0,
-          height: 80.0,
-          decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            image: new DecorationImage(
-                fit: BoxFit.fill,
-                image: new NetworkImage(
-                    "https://cdn.pixabay.com/photo/2016/03/09/15/10/man-1246508_960_720.jpg")),
-          ),
-          margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        ),
-      )
-    ],
-  );
+  static String _getImage() {
+    return userimage;
+  }
+
+  static String _getName() {
+    return username;
+  }
+
+//  static final textContainer = new Column(
+//    mainAxisAlignment: MainAxisAlignment.start,
+//    crossAxisAlignment: CrossAxisAlignment.start,
+//    children: <Widget>[
+//      new Row(
+//        children: <Widget>[
+//          Text(
+//            _getName(),
+//            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+//          )
+//        ],
+//      ),
+//      new SizedBox(
+//        height: 15.0,
+//      ),
+//      new Row(
+//        children: <Widget>[
+//          Text(
+//            "Global Citizen ",
+//            style: TextStyle(fontWeight: FontWeight.bold),
+//          ),
+//          Image.asset("assets/images/earth.png")
+//        ],
+//      ),
+//      new Row(
+//        children: <Widget>[
+//          Text(
+//            "http://abc.com",
+//            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+//          )
+//        ],
+//      ),
+//      new SizedBox(
+//        height: 15.0,
+//      ),
+//      new Row(
+//        children: <Widget>[
+//          Text(
+//            "1,200 ",
+//            style: TextStyle(fontWeight: FontWeight.bold),
+//          ),
+//          Text(
+//            "Followers",
+//            style: TextStyle(fontWeight: FontWeight.normal),
+//          ),
+//          Text(
+//            "380 ",
+//            style: TextStyle(fontWeight: FontWeight.bold),
+//          ),
+//          Text(
+//            "Following",
+//            style: TextStyle(fontWeight: FontWeight.normal),
+//          ),
+//        ],
+//      ),
+//      new Row(
+//        children: <Widget>[
+//          Text(
+//            "Followed by sadjskn and lkdjsan",
+//            style: TextStyle(fontWeight: FontWeight.normal, color: Colors.grey),
+//          )
+//        ],
+//      ),
+//    ],
+//  );
+
+//  static final imageContainer = new Column(
+//    children: <Widget>[
+//      Center(
+//        child: Container(
+//          width: 80.0,
+//          height: 80.0,
+//          decoration: new BoxDecoration(
+//            shape: BoxShape.circle,
+//            image: new DecorationImage(
+//                fit: BoxFit.fill, image: new NetworkImage(userimage)),
+//          ),
+//          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+//        ),
+//      )
+//    ],
+//  );
 
   @override
   _InstaDetailsSilversState createState() => _InstaDetailsSilversState();
@@ -110,9 +121,93 @@ class _InstaDetailsSilversState extends State<InstaDetailsSilvers> {
       new Container(
         child: new Row(
           children: <Widget>[
-            InstaDetailsSilvers.textContainer,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                new Row(
+                  children: <Widget>[
+                    Text(
+                      InstaDetailsSilvers._getName(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    )
+                  ],
+                ),
+                new SizedBox(
+                  height: 15.0,
+                ),
+                new Row(
+                  children: <Widget>[
+                    Text(
+                      "Global Citizen ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Image.asset("assets/images/earth.png")
+                  ],
+                ),
+                new Row(
+                  children: <Widget>[
+                    Text(
+                      "http://abc.com",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.blue),
+                    )
+                  ],
+                ),
+                new SizedBox(
+                  height: 15.0,
+                ),
+                new Row(
+                  children: <Widget>[
+                    Text(
+                      "1,200 ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "Followers",
+                      style: TextStyle(fontWeight: FontWeight.normal),
+                    ),
+                    Text(
+                      "380 ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "Following",
+                      style: TextStyle(fontWeight: FontWeight.normal),
+                    ),
+                  ],
+                ),
+                new Row(
+                  children: <Widget>[
+                    Text(
+                      "Followed by sadjskn and lkdjsan",
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal, color: Colors.grey),
+                    )
+                  ],
+                ),
+              ],
+            ),
             Expanded(
-              child: InstaDetailsSilvers.imageContainer,
+              child: Column(
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      width: 80.0,
+                      height: 80.0,
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            image: new NetworkImage(
+                                InstaDetailsSilvers._getImage())),
+                      ),
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         ),
@@ -201,7 +296,6 @@ Widget _silvers(BuildContext context, Column topView) {
           delegate: SliverChildListDelegate(
             [
               topView,
-
             ],
           ),
         ),

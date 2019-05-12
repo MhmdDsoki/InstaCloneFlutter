@@ -20,7 +20,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // TODO: Add text editing controllers (101)
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -41,7 +40,10 @@ class _LoginPageState extends State<LoginPage> {
                       "English (United Stated)",
                       style: TextStyle(color: Colors.grey[200]),
                     ),
-                    Icon(Icons.arrow_drop_down)
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.grey[200],
+                    )
                   ],
                 ),
 
@@ -50,30 +52,37 @@ class _LoginPageState extends State<LoginPage> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.all(50.0),
-                      child: Image.asset('assets/images/insta_logo.png'),
+                      child: Image.asset(
+                        'assets/images/insta_logo.png',
+                        color: Colors.white,
+                      ),
                     ),
                     SizedBox(height: 16.0),
                   ],
                 ),
                 SizedBox(height: 20.0),
 
-                TextField(
+                TextFormField(
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
                   controller: _usernameController,
                   decoration: InputDecoration(
-                    filled: true,
-                    labelText: 'Username',
-                  ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Username',
+                      labelStyle: TextStyle(color: Colors.black)),
                 ),
 
                 SizedBox(height: 12.0),
 
                 TextField(
                   controller: _passwordController,
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    filled: true,
-                    labelText: 'Password',
-                  ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Password',
+                      labelStyle: TextStyle(color: Colors.black)),
                   obscureText: true,
                 ),
                 SizedBox(height: 12.0),
@@ -81,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text("Log in"),
                   textColor: Colors.grey[200],
                   onPressed: () {
-                    // TODO: Show the next page (101)
+
                     Navigator.pop(context);
                   },
                 ),
@@ -93,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                       "fogot your login details?",
                       style: TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 10,
+                          fontSize: 12,
                           color: Colors.grey[200]),
                     ),
                     SizedBox(width: 5.0),
@@ -101,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                       "Get help siging in.",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 10,
+                          fontSize: 12,
                           color: Colors.grey[200]),
                     ),
                   ],
@@ -119,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                       "  OR  ",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 10,
+                        fontSize: 12,
                         color: Colors.grey[200],
                       ),
                     ),
@@ -139,7 +148,10 @@ class _LoginPageState extends State<LoginPage> {
                         child: SizedBox(
                             height: 20,
                             width: 20,
-                            child: Image.asset('assets/images/fblogo.png')),
+                            child: Image.asset(
+                              'assets/images/fblogo.png',
+                              color: Colors.white,
+                            )),
                       ),
                     ),
                     Text(
@@ -174,14 +186,14 @@ class _LoginPageState extends State<LoginPage> {
                           "Do you have an account? ",
                           style: TextStyle(
                               fontWeight: FontWeight.normal,
-                              fontSize: 10,
+                              fontSize: 13,
                               color: Colors.grey[200]),
                         ),
                         Text(
                           "Sign up",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 10,
+                              fontSize: 13,
                               color: Colors.grey[200]),
                         )
                       ],
@@ -220,5 +232,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-// TODO: Add AccentColorOverride (103)
