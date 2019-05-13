@@ -14,8 +14,7 @@ class InstaSearch extends StatelessWidget {
         child: new TextField(
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300),
           decoration: InputDecoration(
-              hintText: "Search",
-              hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.black)
+            labelText: "Search",
           ),
           textInputAction: TextInputAction.search,
 //          decoration: InputDecoration(

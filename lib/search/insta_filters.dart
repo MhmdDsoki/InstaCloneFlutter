@@ -33,11 +33,15 @@ class InstaFilters extends StatefulWidget {
 class InstaFiltersState extends State<InstaFilters> {
   static List<tagObj> list = List();
   var isLoading = false;
+  bool isSelected;
+  var cur_inx;
 
   @override
   void initState() {
     super.initState();
     _fetchData();
+    isSelected = false;
+    cur_inx = 0;
   }
 
   _fetchData() async {
@@ -91,8 +95,8 @@ class InstaFiltersState extends State<InstaFilters> {
 
   @override
   Widget build(BuildContext context) {
-    Color _myColor = Colors.black;
-    bool pressed = true;
+    Color _myColor = Colors.white;
+
     return Scaffold(
         body: isLoading
             ? Center(
@@ -108,46 +112,13 @@ class InstaFiltersState extends State<InstaFilters> {
                     Expanded(
                       child: Center(
                         child: new Padding(
-                          padding: const EdgeInsets.only(top: 2.0),
+                          padding: const EdgeInsets.only(top: 5.0),
                           child: new ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: list.length,
-                            itemBuilder: (context, index) {
-                              return new GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    if (pressed) {
-                                      _myColor = Colors.white;
-                                    } else {
-                                      _myColor = Colors.black;
-                                    }
-
-                                  });
-                                },
-                                child: new Stack(
-                                    alignment: Alignment.bottomRight,
-                                    children: <Widget>[
-                                      new Container(
-                                        child: OutlineButton(
-                                          textColor: _myColor,
-                                          child: Text(list[index].tag_name),
-                                          color: _myColor,
-                                          onPressed: () {
-                                            pressed = !pressed;
-                                            setState(() {
-                                              if (pressed) {
-                                                _myColor = Colors.white;
-                                              } else {
-                                                _myColor = Colors.black;
-                                              }
-
-                                            });
-                                          },
-                                        ),
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                      ),
-                                    ]),
+                            itemBuilder: (BuildContext context, int index) {
+                              return new ListTileItem(
+                                title: list[index].tag_name,
                               );
                             },
                           ),
@@ -157,5 +128,50 @@ class InstaFiltersState extends State<InstaFilters> {
                   ],
                 ),
               ));
+  }
+}
+
+class ListTileItem extends StatefulWidget {
+  String title;
+
+  ListTileItem({this.title});
+
+  @override
+  _ListTileItemState createState() => new _ListTileItemState();
+}
+
+class _ListTileItemState extends State<ListTileItem> {
+  @override
+  void initState() {
+    super.initState();
+
+    isSelected = false;
+  }
+
+  bool isSelected;
+  int _itemCount = 0;
+
+//&& index == cur_inx
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: RaisedButton(
+        textColor: isSelected ? Colors.white : Colors.black,
+        child: Text(widget.title),
+        color: isSelected ? Colors.blue : Colors.white,
+        onPressed: () {
+          if (isSelected) {
+            setState(() {
+              isSelected = false;
+            });
+          } else {
+            setState(() {
+              isSelected = true;
+            });
+          }
+        },
+      ),
+    );
   }
 }
