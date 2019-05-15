@@ -8,7 +8,7 @@
   <tr>
     <th></th>
     <th></th>
-    <th></th>
+  
    <tr>
      <tr>
       <td><img src="home.png" height="300em" /></td>
