@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_insta_clone/favorite/insta_favorite.dart';
 import 'package:flutter_insta_clone/insta_home.dart';
 import 'package:flutter_insta_clone/pages/login.dart';
 import 'package:flutter_insta_clone/search/insta_search.dart';
@@ -146,7 +147,7 @@ class _InstaHomeState extends State<InstaHomeState> {
       InstaHome(),
       InstaSearch(),
       Container(color: Colors.green),
-      InstaHome(),
+      InstaFavorite(),
       Container(color: Colors.red),
     ];
   }
