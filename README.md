@@ -11,17 +11,14 @@
     <th></th>
    <tr>
      <tr>
-      <td><img src="fav_following.png" height="300em" /></td>
+      <td><img src="home.png" height="300em" /></td>
       <td><img src="fav_following.png" height="300em" /></td>
    <tr>
    <tr>
      <td><img src="search.png" height="300em" /></td>
      <td><img src="you.png" height="300em" /></td>
    <tr>
-   <tr>
-      <td><img src="fav_following.png" height="300em" /></td>
-      <td><img src="fav_following.png" height="300em" /></td>
-   <tr>
+   
   
 </table>
  
