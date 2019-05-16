@@ -48,10 +48,13 @@ class InstaListState extends State<YouPage> {
                     height: 45.0,
                     decoration: new BoxDecoration(
                       border: Border.all(
-                          color: Colors.white, width: 2, style: BorderStyle.solid),
+                          color: Colors.white,
+                          width: 2,
+                          style: BorderStyle.solid),
                       shape: BoxShape.circle,
                       image: new DecorationImage(
-                          fit: BoxFit.fill, image: new NetworkImage(images[index])),
+                          fit: BoxFit.fill,
+                          image: new NetworkImage(images[index])),
                     ),
                   ),
                 ),
@@ -64,12 +67,13 @@ class InstaListState extends State<YouPage> {
                     height: 45.0,
                     decoration: new BoxDecoration(
                       border: Border.all(
-                          color: Colors.white, width: 2, style: BorderStyle.solid),
+                          color: Colors.white,
+                          width: 2,
+                          style: BorderStyle.solid),
                       shape: BoxShape.circle,
                       image: new DecorationImage(
                           fit: BoxFit.fill, image: new NetworkImage(images[2])),
                     ),
-
                   ),
                 ),
               ],
@@ -198,69 +202,5 @@ class InstaListState extends State<YouPage> {
               itemBuilder: (context, index) =>
                   index == 0 || index == 3 ? text(index) : row(index))),
     );
-
-//    return Scaffold(
-//        body: ListView.builder(
-//            itemCount: 6,
-//            itemBuilder: (context, index) => index == 0
-//                ? Container(
-//                    child: Row(
-//                  children: <Widget>[
-//                    Container(
-//                      width: 60.0,
-//                      height: 60.0,
-//                      decoration: new BoxDecoration(
-//                        border: Border.all(
-//                            color: Colors.blue,
-//                            width: 2,
-//                            style: BorderStyle.solid),
-//                        shape: BoxShape.circle,
-//                        image: new DecorationImage(
-//                            fit: BoxFit.fill,
-//                            image: new NetworkImage(images[0])),
-//                      ),
-//                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-//                    ),
-//                    Column(
-//                      children: <Widget>[
-//                        Row(
-//                          children: <Widget>[
-//                            Text(
-//                              "ifbbpro_andy",
-//                              style: TextStyle(fontWeight: FontWeight.bold),
-//                            ),
-//                            Text(
-//                              "liked 8 photos",
-//                              style:
-//                                  TextStyle(fontWeight: FontWeight.normal),
-//                            ),
-//                            Text(
-//                              "55s",
-//                              style: TextStyle(fontWeight: FontWeight.w200),
-//                            ),
-//                          ],
-//                        ),
-//                        ListView.builder(
-//                            itemCount: 5,
-//                            itemBuilder: (context, index) => Container(
-//                                  child: Container(
-//                                    width: 60.0,
-//                                    height: 60.0,
-//                                    decoration: new BoxDecoration(
-//                                      shape: BoxShape.rectangle,
-//                                      image: new DecorationImage(
-//                                          fit: BoxFit.fill,
-//                                          image: new NetworkImage(
-//                                              images[index])),
-//                                    ),
-//                                    margin: const EdgeInsets.symmetric(
-//                                        horizontal: 8.0),
-//                                  ),
-//                                ))
-//                      ],
-//                    ),
-//                  ],
-//                ))
-//                : Container(child: Text(",nbfcvgbhjnmkjhjghfg"))));
   }
 }

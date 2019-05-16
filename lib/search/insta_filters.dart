@@ -1,11 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_insta_clone/insta_profile.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_insta_clone/insta_profile.dart';
-import 'package:flutter_insta_clone/insta_stories.dart';
-import 'package:flutter_insta_clone/models/PostObj.dart';
 import 'package:flutter_insta_clone/models/TagObj.dart';
 import 'package:flutter_insta_clone/util/Constans.dart';
 import 'package:http/http.dart' as http;
@@ -65,34 +60,6 @@ class InstaFiltersState extends State<InstaFilters> {
     }
   }
 
-//  final tags = new Expanded(
-//    child: Center(
-//      child: new Padding(
-//        padding: const EdgeInsets.only(top: 2.0),
-//        child: new ListView.builder(
-//          scrollDirection: Axis.horizontal,
-//          itemCount: list.length,
-//          itemBuilder: (context, index) {
-//            return new GestureDetector(
-//              child: new Stack(
-//                  alignment: Alignment.bottomRight,
-//                  children: <Widget>[
-//                    new Container(
-//                      child: OutlineButton(
-//                        textColor: Colors.black,
-//                        child: Text(list[index].tag_name),
-//                        onPressed: () {},
-//                      ),
-//                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-//                    ),
-//                  ]),
-//            );
-//          },
-//        ),
-//      ),
-//    ),
-//  );
-
   @override
   Widget build(BuildContext context) {
     Color _myColor = Colors.white;
@@ -149,7 +116,6 @@ class _ListTileItemState extends State<ListTileItem> {
   }
 
   bool isSelected;
-  int _itemCount = 0;
 
 //&& index == cur_inx
   @override

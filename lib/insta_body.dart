@@ -7,11 +7,7 @@ class InstaBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        //InstaList()
-        // Expanded(flex: 1, child: new InstaStories()),
-        Flexible(child: InstaList())
-      ],
+      children: <Widget>[Flexible(child: InstaList())],
     );
   }
 }

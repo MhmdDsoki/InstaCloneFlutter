@@ -8,13 +8,6 @@ import 'models/UserObj.dart';
 import 'util/Constans.dart';
 
 class InstaStories extends StatefulWidget {
-//  static List<String> images = [
-//    "https://pbs.twimg.com/profile_images/916384996092448768/PF1TSFOE_400x400.jpg",
-//    "https://petrieflom.law.harvard.edu/images/made/82e033b5d85a88b0/Cohen2015_people_300_300_85.jpg",
-//    "https://cdn.rheinmetall-automotive.com/fileadmin//_migrated/news_uploads/11.1_KSPG_Dr._Alexander_Sagel_02.jpg",
-//    "https://petrieflom.law.harvard.edu/images/made/82e033b5d85a88b0/Cohen2015_people_300_300_85.jpg",
-//    "https://petrieflom.law.harvard.edu/images/made/82e033b5d85a88b0/Cohen2015_people_300_300_85.jpg"
-//  ];
 
   @override
   _InstaStoriesState createState() => _InstaStoriesState();

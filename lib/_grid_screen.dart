@@ -40,30 +40,26 @@ class _MainFetchDataState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : GridView.count(
-                crossAxisCount: 3,
-                children: List.generate(
-                  list.length,
-                  (index) {
-                    return Container(
-                        padding: EdgeInsets.all(1),
-                        child: FadeInImage.assetNetwork(
-                            height: 70.0,
-                            width: 70.0,
-                            fit: BoxFit.cover,
-                            placeholder: ("assets/images/placeholder.png"),
-                            image: list[index].thumbnailUrl));
-//                        Image.network(
-//                          list[index].thumbnailUrl,
-//                          fit: BoxFit.cover,
-//                          height: 70.0,
-//                          width: 70.0,
-//                        ));
-                  },
-                )));
+        body: Container(
+      child: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : GridView.count(
+              crossAxisCount: 3,
+              children: List.generate(
+                list.length,
+                (index) {
+                  return Container(
+                      padding: EdgeInsets.all(1),
+                      child: FadeInImage.assetNetwork(
+                          height: 70.0,
+                          width: 70.0,
+                          fit: BoxFit.cover,
+                          placeholder: ("assets/images/placeholder.png"),
+                          image: list[index].thumbnailUrl));
+                },
+              )),
+    ));
   }
 }

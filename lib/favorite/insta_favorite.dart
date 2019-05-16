@@ -38,21 +38,23 @@ class InstaFavorite extends StatelessWidget {
           textTheme: TextTheme(title: TextStyle(color: Colors.grey))),
       home: DefaultTabController(
         length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
+        child: SafeArea(
+          child: Scaffold(
+            appBar: TabBar(
+              labelColor: Colors.blue,
+              unselectedLabelColor: Colors.grey,
               tabs: [
                 Tab(text: "FOLLOWING"),
                 Tab(text: "YOU"),
               ],
               indicatorColor: Colors.black,
             ),
-          ),
-          body: TabBarView(
-            children: [
-              FollowingPage(),
-              YouPage(),
-            ],
+            body: TabBarView(
+              children: [
+                FollowingPage(),
+                YouPage(),
+              ],
+            ),
           ),
         ),
       ),

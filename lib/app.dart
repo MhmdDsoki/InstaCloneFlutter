@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/favorite/insta_favorite.dart';
 import 'package:flutter_insta_clone/insta_home.dart';
+import 'package:flutter_insta_clone/insta_profile.dart';
 import 'package:flutter_insta_clone/pages/login.dart';
+import 'package:flutter_insta_clone/profilepage/insta_profile_tab.dart';
 import 'package:flutter_insta_clone/search/insta_search.dart';
 import 'package:flutter_insta_clone/util/InstaColors.dart';
 
@@ -40,6 +42,7 @@ ThemeData _buildThemeData() {
   return base.copyWith(
     primaryColor: primaryColor,
     accentColor: accentColor,
+    canvasColor: Colors.transparent,
     textTheme: _buildTextTheme(base.textTheme, Colors.black),
     primaryIconTheme: IconThemeData(color: Colors.black),
     buttonTheme: _buildButtonTheme(base.buttonTheme, accentColor),
@@ -58,10 +61,9 @@ _buildButtonTheme(ButtonThemeData base, Color color) {
 _buildTextTheme(TextTheme base, Color color) {
   return base
       .copyWith(
-        headline: base.headline.copyWith( ),
+        headline: base.headline.copyWith(),
         title: base.title.copyWith(fontSize: 18.0),
-        caption:
-            base.caption.copyWith(  fontSize: 14.0),
+        caption: base.caption.copyWith(fontSize: 14.0),
       )
       .apply(fontFamily: 'Aveny', displayColor: color, bodyColor: color);
 }
@@ -148,7 +150,7 @@ class _InstaHomeState extends State<InstaHomeState> {
       InstaSearch(),
       Container(color: Colors.green),
       InstaFavorite(),
-      Container(color: Colors.red),
+      InstaProfileTaab(),
     ];
   }
 
