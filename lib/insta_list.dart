@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/insta_profile.dart';
 import 'package:flutter_insta_clone/insta_stories.dart';
 import 'package:flutter_insta_clone/models/PostObj.dart';
 import 'package:http/http.dart' as http;
+
+import 'db/postservice.dart';
 import 'util/Constans.dart';
 
 class InstaList extends StatefulWidget {
@@ -18,11 +21,91 @@ class InstaListState extends State<InstaList> {
   static List<postObj> list = List();
   var isLoading = false;
 
+  FirebaseDatabase _database = FirebaseDatabase.instance;
+  String nodeName = "posts";
+  List<postObj> postsList = <postObj>[];
+
+  postObj post = postObj(
+    0,
+    "mohamed sayed",
+    "https://avatars0.githubusercontent.com/u/38107393?s=460&v=4",
+    "https://avatars0.githubusercontent.com/u/38107393?s=460&v=4",
+    ["ahmed", "mohamed", "ali", "kgysldbas"],
+    "yesterday",
+  );
+
   @override
   void initState() {
-    super.initState();
+    _database.reference().child(nodeName).onChildAdded.listen(_childAdded);
     _fetchData();
+    insertPost();
+    super.initState();
   }
+
+//  Widget getPost(){
+//    return  FirebaseAnimatedList(
+//        query: _database.reference().child('posts'),
+//        itemBuilder: (_, DataSnapshot snap, Animation<double> animation, int index){
+//          return Padding(
+//            padding: const EdgeInsets.all(8.0),
+//            child: Card(
+//              child: ListTile(
+//                title: ListTile(
+//                  onTap: (){
+//                    Navigator.push(context, MaterialPageRoute(builder: (context) => PostView(postsList[index])));
+//                  },
+//                  title: Text(
+//                    postsList[index].title,
+//                    style: TextStyle(
+//                        fontSize: 22.0, fontWeight: FontWeight.bold),
+//                  ),
+//                  trailing: Text(
+//                    timeago.format(DateTime.fromMillisecondsSinceEpoch(postsList[index].date)),
+//                    style: TextStyle(fontSize: 14.0, color: Colors.grey),
+//                  ),
+//                ),
+//                subtitle: Padding(
+//                  padding: const EdgeInsets.only(bottom: 14.0),
+//                  child: Text(postsList[index].body, style: TextStyle(fontSize: 18.0),),
+//                ),
+//              ),
+//            ),
+//          );
+//  };
+  //}
+
+  void insertPost() {
+    PostService postService = PostService(post.toMap());
+    postService.addPost();
+  }
+
+  _childAdded(Event event) {
+    setState(() {
+      postsList.add(postObj.fromSnapshot(event.snapshot));
+      print("jhrgfhtgjyhkuj*****" + postsList[postsList.length].creator_name);
+    });
+  }
+
+//  void _childRemoves(Event event) {
+//    var deletedPost = postsList.singleWhere((post) {
+//      return post.key == event.snapshot.key;
+//    });
+//
+//    setState(() {
+//      postsList.removeAt(postsList.indexOf(deletedPost));
+//    });
+//  }
+//
+//  void _childChanged(Event event) {
+//    var changedPost = postsList.singleWhere((post) {
+//      return post.key == event.snapshot.key;
+//    });
+//
+//    setState(() {
+//      postsList[postsList.indexOf(changedPost)] =
+//          postObj.fromSnapshot(event.snapshot);
+//    });
+//  }
 
   _fetchData() async {
     setState(() {
@@ -79,26 +162,30 @@ class InstaListState extends State<InstaList> {
                                       child: new Container(
                                         height: 40.0,
                                         width: 40.0,
-
                                         decoration: new BoxDecoration(
                                           shape: BoxShape.circle,
                                           image: new DecorationImage(
                                               fit: BoxFit.fill,
-
                                               image: new NetworkImage(
-                                                  list[index - 1].creator_image)),
+                                                  list[index - 1]
+                                                      .creator_image)),
                                         ),
-                                      ),onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) =>
-                                          InstaProfile( list[index-1].creator_name,list[index-1].creator_image)),
-                                    ),
+                                      ),
+                                      onTap: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    InstaProfile(
+                                                        list[index - 1]
+                                                            .creator_name,
+                                                        list[index - 1]
+                                                            .creator_image)),
+                                          ),
                                     ),
                                     new SizedBox(
                                       width: 10.0,
                                     ),
                                     new Text(
-
                                       list[index - 1].creator_name,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
@@ -198,7 +285,7 @@ class InstaListState extends State<InstaList> {
                           )
                         ],
                       ),
-        ));
+              ));
   }
 
   List<Widget> liked_by(List<String> list) {

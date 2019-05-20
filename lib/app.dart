@@ -61,10 +61,10 @@ _buildButtonTheme(ButtonThemeData base, Color color) {
 _buildTextTheme(TextTheme base, Color color) {
   return base
       .copyWith(
-        headline: base.headline.copyWith(),
-        title: base.title.copyWith(fontSize: 18.0),
-        caption: base.caption.copyWith(fontSize: 14.0),
-      )
+    headline: base.headline.copyWith(),
+    title: base.title.copyWith(fontSize: 18.0),
+    caption: base.caption.copyWith(fontSize: 14.0),
+  )
       .apply(fontFamily: 'Aveny', displayColor: color, bodyColor: color);
 }
 

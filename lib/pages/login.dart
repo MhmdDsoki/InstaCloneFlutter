@@ -13,6 +13,9 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_insta_clone/db/postservice.dart';
+import 'package:flutter_insta_clone/models/PostObj.dart';
+import 'package:flutter_insta_clone/models/post.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -22,6 +25,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  @override
+  void initState() {}
 
   Widget _getContent() {
     return SafeArea(
@@ -90,7 +96,6 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text("Log in"),
                   textColor: Colors.grey[200],
                   onPressed: () {
-
                     Navigator.pop(context);
                   },
                 ),

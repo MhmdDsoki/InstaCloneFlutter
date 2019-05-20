@@ -1,21 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_insta_clone/insta_profile.dart';
 import 'package:http/http.dart' as http;
 
+import 'db/storyservice.dart';
 import 'models/UserObj.dart';
 import 'util/Constans.dart';
 
 class InstaStories extends StatefulWidget {
-
   @override
   _InstaStoriesState createState() => _InstaStoriesState();
 }
 
 class _InstaStoriesState extends State<InstaStories> {
-  static List<userObj> list = List();
+  static List<User> list = List();
   var isLoading = false;
+
+//  static final databaseReference = FirebaseDatabase.instance.reference();
 
   @override
   void initState() {
@@ -31,14 +32,29 @@ class _InstaStoriesState extends State<InstaStories> {
         await http.get(Constants.BASE_API_URL + Constants.users_URL);
     if (response.statusCode == 200) {
       list = (json.decode(response.body) as List)
-          .map((data) => new userObj.fromJson(data))
+          .map((data) => new User.fromJson(data))
           .toList();
       setState(() {
         isLoading = false;
+        _addStory();
       });
     } else {
       throw Exception('Failed to load photos');
     }
+  }
+
+  _addStory() {
+    User story = User(
+        0,
+        "abualgait@gmail.com",
+        "post",
+        "mo sayed",
+        "https://avatars0.githubusercontent.com/u/38107393?s=460&v=4",
+        "62",
+        "15");
+
+    StoryService storyService = StoryService(story.toMap(story));
+    storyService.addStory();
   }
 
   final topText = Row(
@@ -58,37 +74,51 @@ class _InstaStoriesState extends State<InstaStories> {
   );
 
   static setImage(int index) {
-    return new Stack(
-      alignment: Alignment.bottomRight,
-      children: <Widget>[
-        new Container(
-          width: 60.0,
-          height: 60.0,
-          decoration: new BoxDecoration(
-            border: Border.all(
-                color: Colors.blue, width: 2, style: BorderStyle.solid),
-            shape: BoxShape.circle,
-            image: new DecorationImage(
-                fit: BoxFit.fill, image: new NetworkImage(list[index].image)),
+    return GestureDetector(
+      onTap: () => {},
+      child: new Stack(
+        alignment: Alignment.bottomRight,
+        children: <Widget>[
+          new Container(
+            width: 60.0,
+            height: 60.0,
+            decoration: new BoxDecoration(
+              border: Border.all(
+                  color: Colors.blue, width: 2, style: BorderStyle.solid),
+              shape: BoxShape.circle,
+              image: new DecorationImage(
+                  fit: BoxFit.fill, image: new NetworkImage(list[index].image)),
+            ),
+            margin: const EdgeInsets.symmetric(horizontal: 8.0),
           ),
-          margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        ),
-        index == 0
-            ? Positioned(
-                right: 10.0,
-                child: new CircleAvatar(
-                  backgroundColor: Colors.blueAccent,
-                  radius: 10.0,
-                  child: new Icon(
-                    Icons.add,
-                    size: 14.0,
-                    color: Colors.white,
-                  ),
-                ))
-            : new Container()
-      ],
+          index == 0
+              ? Positioned(
+                  right: 10.0,
+                  child: new CircleAvatar(
+                    backgroundColor: Colors.blueAccent,
+                    radius: 10.0,
+                    child: new Icon(
+                      Icons.add,
+                      size: 14.0,
+                      color: Colors.white,
+                    ),
+                  ))
+              : new Container()
+        ],
+      ),
     );
   }
+
+//  static void createRecord() {
+//    databaseReference.child("1").set({
+//      'title': 'Mastering EJB',
+//      'description': 'Programming Guide for J2EE'
+//    });
+//    databaseReference.child("2").set({
+//      'title': 'Flutter in Action',
+//      'description': 'Complete Programming Guide to learn Flutter'
+//    });
+//  }
 
   final stories = Expanded(
     child: new Padding(
