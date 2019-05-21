@@ -17,7 +17,6 @@ class _InstaStoriesState extends State<InstaStories> {
   var isLoading = false;
 
 //  static final databaseReference = FirebaseDatabase.instance.reference();
-
   @override
   void initState() {
     super.initState();
@@ -36,7 +35,6 @@ class _InstaStoriesState extends State<InstaStories> {
           .toList();
       setState(() {
         isLoading = false;
-        _addStory();
       });
     } else {
       throw Exception('Failed to load photos');
@@ -137,10 +135,12 @@ class _InstaStoriesState extends State<InstaStories> {
       ),
     ),
   );
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         body: isLoading
             ? Center(
                 child: CircularProgressIndicator(),

@@ -4,44 +4,82 @@ import 'package:flutter_insta_clone/favorite/you_page.dart';
 import 'package:flutter_insta_clone/insta_body.dart';
 import 'package:flutter_insta_clone/profilepage/insta_profile_page.dart';
 import 'package:flutter_insta_clone/search/insta_search_content.dart';
+import 'package:flutter_insta_clone/util/authntication.dart';
 
-class InstaProfileTaab extends StatelessWidget {
-  Widget topBar(BuildContext context) {
-    return new AppBar(
-      backgroundColor: new Color(0xfff8faf8),
-      centerTitle: true,
-      elevation: 1.0,
-      titleSpacing: 0.0,
-      title: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: <Widget>[
-            Text("mohamedsayed"),
-            IconButton(
-              icon: Icon(Icons.keyboard_arrow_down),
-              onPressed: () {
-                _settingModalBottomSheet(context);
-              },
-            )
-          ],
-        ),
-      ),
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(right: 12.0),
-          child: Icon(Icons.history),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 12.0),
-          child: Icon(Icons.menu),
-        )
-      ],
-    );
+class InstaProfileTaab extends StatefulWidget {
+  InstaProfileTaab({this.userId, this.auth, this.onSignedOut});
+
+  final String userId;
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+
+  @override
+  _InstaProfileTaabState createState() => _InstaProfileTaabState();
+}
+
+class _InstaProfileTaabState extends State<InstaProfileTaab> {
+  String currentUserEmail = "";
+
+  @override
+  void initState() {
+    super.initState();
+    widget.auth.getCurrentUser().then((user) {
+      setState(() {
+        if (user != null) {
+          currentUserEmail = user?.email;
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(appBar: topBar(context), body: new InstaProfilePage());
+    return new Scaffold(
+        appBar: AppBar(
+          backgroundColor: new Color(0xfff8faf8),
+          centerTitle: true,
+          elevation: 1.0,
+          titleSpacing: 0.0,
+          title: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: <Widget>[
+                Text(currentUserEmail),
+                IconButton(
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  onPressed: () {
+                    _settingModalBottomSheet(context);
+                  },
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: Icon(Icons.history),
+            ),
+            GestureDetector(
+              onTap: () {
+                _signOut();
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 12.0),
+                child: Icon(Icons.exit_to_app),
+              ),
+            )
+          ],
+        ),
+        body: new InstaProfilePage());
+  }
+
+  _signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.onSignedOut();
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _settingModalBottomSheet(context) {
@@ -95,7 +133,7 @@ class InstaProfileTaab extends StatelessWidget {
                                   width: 15,
                                 ),
                                 new Text(
-                                  "Muhammad Sayed",
+                                  currentUserEmail,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],

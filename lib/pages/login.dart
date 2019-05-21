@@ -12,12 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:firebase_auth/firebase_auth.dart'
+    show FirebaseAuth, FirebaseUser;
 import 'package:flutter/material.dart';
-import 'package:flutter_insta_clone/db/postservice.dart';
-import 'package:flutter_insta_clone/models/PostObj.dart';
-import 'package:flutter_insta_clone/models/post.dart';
+import 'package:flutter_insta_clone/signup/signupPage.dart';
+import 'package:flutter_insta_clone/util/authntication.dart';
+import 'dart:async';
+
+import '../app.dart';
 
 class LoginPage extends StatefulWidget {
+  LoginPage({this.auth, this.onSignedIn, this.onSignedUp});
+
+  final BaseAuth auth;
+  final VoidCallback onSignedIn;
+  final VoidCallback onSignedUp;
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -25,9 +35,18 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
-  void initState() {}
+  void initState() {
+    super.initState();
+    getUser().then((user) {
+      if (user != null) {
+        // send the user to the home page
+        widget.onSignedIn();
+      }
+    });
+  }
 
   Widget _getContent() {
     return SafeArea(
@@ -68,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 20.0),
 
-                TextFormField(
+                TextField(
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
                   controller: _usernameController,
@@ -96,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text("Log in"),
                   textColor: Colors.grey[200],
                   onPressed: () {
-                    Navigator.pop(context);
+                    signInWithEmail();
                   },
                 ),
                 SizedBox(height: 12.0),
@@ -194,12 +213,23 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 13,
                               color: Colors.grey[200]),
                         ),
-                        Text(
-                          "Sign up",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                              color: Colors.grey[200]),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SignupPage(
+                                            auth: widget.auth,
+                                            onSignedUp: widget.onSignedUp)));
+                          },
+                          child: Text(
+                            "Sign up",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                                color: Colors.grey[200]),
+                          ),
                         )
                       ],
                     ),
@@ -235,5 +265,20 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ],
     );
+  }
+
+  Future<FirebaseUser> getUser() async {
+    return await _auth.currentUser();
+  }
+
+  String userId = "";
+
+  void signInWithEmail() async {
+    userId = await widget.auth
+        .signIn(_usernameController.text, _passwordController.text);
+    if (userId.length > 0 && userId != null) {
+      widget.onSignedIn();
+      print('Signed in: $userId');
+    }
   }
 }

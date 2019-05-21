@@ -5,8 +5,32 @@ import 'package:flutter_insta_clone/favorite/you_page.dart';
 import 'package:flutter_insta_clone/insta_body.dart';
 import 'package:flutter_insta_clone/insta_details_silvers.dart';
 import 'package:flutter_insta_clone/search/insta_search_content.dart';
+import 'package:flutter_insta_clone/util/authntication.dart';
 
-class InstaProfilePage extends StatelessWidget {
+class InstaProfilePage extends StatefulWidget {
+  InstaProfilePage({this.auth});
+
+  final BaseAuth auth;
+
+  @override
+  _InstaProfilePageState createState() => _InstaProfilePageState();
+}
+
+class _InstaProfilePageState extends State<InstaProfilePage> {
+  static String currentUserEmail = "";
+
+  @override
+  void initState() {
+    super.initState();
+//    widget.auth.getCurrentUser().then((user) {
+//      setState(() {
+//        if (user != null) {
+//          currentUserEmail = user?.email;
+//        }
+//      });
+//    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +123,7 @@ class InstaProfilePage extends StatelessWidget {
                       height: 15.0,
                     ),
                     new Text(
-                      "Muhammad Sayed",
+                      "muhammad sayed",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],

@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/favorite/insta_favorite.dart';
 import 'package:flutter_insta_clone/insta_home.dart';
-import 'package:flutter_insta_clone/insta_profile.dart';
-import 'package:flutter_insta_clone/pages/login.dart';
 import 'package:flutter_insta_clone/profilepage/insta_profile_tab.dart';
+import 'package:flutter_insta_clone/rootPage.dart';
 import 'package:flutter_insta_clone/search/insta_search.dart';
 import 'package:flutter_insta_clone/util/InstaColors.dart';
+import 'package:flutter_insta_clone/util/authntication.dart';
+
+import 'addpost/AddPost.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -15,26 +17,11 @@ class MyApp extends StatelessWidget {
     final appName = 'Instagram';
 
     return new MaterialApp(
-      title: appName,
-      debugShowCheckedModeBanner: true,
-      theme: _buildThemeData(),
-      initialRoute: '/login',
-      onGenerateRoute: _getRoute,
-      home: new InstaHomeState(),
-    );
+        title: appName,
+        debugShowCheckedModeBanner: true,
+        theme: _buildThemeData(),
+        home: new RootPage(auth: new Auth()));
   }
-}
-
-Route<dynamic> _getRoute(RouteSettings settings) {
-  if (settings.name != '/login') {
-    return null;
-  }
-
-  return MaterialPageRoute<void>(
-    settings: settings,
-    builder: (BuildContext context) => LoginPage(),
-    fullscreenDialog: true,
-  );
 }
 
 ThemeData _buildThemeData() {
@@ -61,14 +48,20 @@ _buildButtonTheme(ButtonThemeData base, Color color) {
 _buildTextTheme(TextTheme base, Color color) {
   return base
       .copyWith(
-    headline: base.headline.copyWith(),
-    title: base.title.copyWith(fontSize: 18.0),
-    caption: base.caption.copyWith(fontSize: 14.0),
-  )
+        headline: base.headline.copyWith(),
+        title: base.title.copyWith(fontSize: 18.0),
+        caption: base.caption.copyWith(fontSize: 14.0),
+      )
       .apply(fontFamily: 'Aveny', displayColor: color, bodyColor: color);
 }
 
 class InstaHomeState extends StatefulWidget {
+  InstaHomeState({this.userId, this.auth, this.onSignedOut});
+
+  final String userId;
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+
   State createState() => new _InstaHomeState();
 }
 
@@ -148,9 +141,12 @@ class _InstaHomeState extends State<InstaHomeState> {
     _pages = [
       InstaHome(),
       InstaSearch(),
-      Container(color: Colors.green),
+      InstaAddPost(),
       InstaFavorite(),
-      InstaProfileTaab(),
+      InstaProfileTaab(
+          userId: widget.userId,
+          auth: widget.auth,
+          onSignedOut: widget.onSignedOut),
     ];
   }
 

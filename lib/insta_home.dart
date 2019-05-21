@@ -19,6 +19,6 @@ class InstaHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(appBar: topBar, body: new InstaBody());
+    return new Scaffold(appBar: topBar, body: InstaBody());
   }
 }
