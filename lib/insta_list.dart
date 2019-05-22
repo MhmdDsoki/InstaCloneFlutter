@@ -8,6 +8,7 @@ import 'package:flutter_insta_clone/insta_stories.dart';
 import 'package:flutter_insta_clone/models/PostObj.dart';
 import 'package:http/http.dart' as http;
 import 'util/Constans.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class InstaList extends StatefulWidget {
   @override
@@ -133,6 +134,17 @@ class InstaListState extends State<InstaList> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         children: <Widget>[
+                          Text(postsList[index - 1].post_caption),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: <Widget>[
                           Text("Liked by "),
                           Row(children: liked_by(postsList[index - 1].liked_by))
                         ],
@@ -155,7 +167,7 @@ class InstaListState extends State<InstaList> {
                             ),
                           ),
                           new SizedBox(
-                            width: 10.0,
+                            width: 16.0,
                           ),
                           Expanded(
                             child: new TextField(
@@ -170,7 +182,9 @@ class InstaListState extends State<InstaList> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(postsList[index - 1].post_time,
+                      child: Text(
+                          timeago.format(DateTime.fromMillisecondsSinceEpoch(
+                              postsList[index - 1].post_time)),
                           style: TextStyle(color: Colors.grey)),
                     )
                   ],

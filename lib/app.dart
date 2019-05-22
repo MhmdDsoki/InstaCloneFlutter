@@ -112,7 +112,12 @@ class _InstaHomeState extends State<InstaHomeState> {
                     Icons.add_box,
                   ),
                   onPressed: () {
-                    _onTabTapped(2);
+                    //_onTabTapped(2);
+                    Navigator.of(context).push(new MaterialPageRoute<Null>(
+                        builder: (BuildContext context) {
+                          return InstaAddPost();
+                        },
+                        fullscreenDialog: true));
                   },
                 ),
                 new IconButton(

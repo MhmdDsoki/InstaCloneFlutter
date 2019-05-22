@@ -43,7 +43,7 @@ class _InstaStoriesState extends State<InstaStories> {
 
   _addStory() {
     User story = User(
-        0,
+        "0",
         "abualgait@gmail.com",
         "post",
         "mo sayed",

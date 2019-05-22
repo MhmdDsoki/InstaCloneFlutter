@@ -1,10 +1,10 @@
 class User {
-  int id;
+  String id;
   String name;
   String email;
   String image;
-  String followers;
-  String following;
+  String followers = "0";
+  String following = "0";
   String posts;
 
   User(this.id, this.email, this.posts, this.name, this.image, this.followers,
