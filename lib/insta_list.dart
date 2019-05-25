@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/insta_profile.dart';
 import 'package:flutter_insta_clone/insta_stories.dart';
 import 'package:flutter_insta_clone/models/PostObj.dart';
+import 'package:flutter_insta_clone/util/authntication.dart';
 import 'package:http/http.dart' as http;
-import 'util/Constans.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import 'util/Constans.dart';
 
 class InstaList extends StatefulWidget {
   @override
@@ -24,6 +26,11 @@ class InstaListState extends State<InstaList> {
   String nodeName = "posts";
   List<postObj> postsList = <postObj>[];
 
+  final BaseAuth auth = new Auth();
+  String _userId = "";
+  String _userEmail = "";
+  String _defaultImageUrl = "";
+
   _childAdded(Event event) {
     setState(() {
       postsList.add(postObj.fromSnapshot(event.snapshot));
@@ -34,6 +41,37 @@ class InstaListState extends State<InstaList> {
   void initState() {
     _database.reference().child(nodeName).onChildAdded.listen(_childAdded);
     super.initState();
+    auth.getCurrentUser().then((user) {
+      setState(() {
+        if (user != null) {
+          _userId = user?.uid;
+          _userEmail = user?.email;
+          getUsers();
+        }
+      });
+    });
+  }
+
+  void getUsers() async {
+    String defaultImageUrl = "";
+
+    FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(_userId)
+        .once()
+        .then((DataSnapshot snapshot) {
+      //here i iterate and create the list of objects
+      Map<dynamic, dynamic> yearMap = snapshot.value;
+      yearMap.forEach((key, value) {
+        setState(() {
+          defaultImageUrl = value['image'];
+        });
+      });
+      setState(() {
+        _defaultImageUrl = defaultImageUrl;
+      });
+    });
   }
 
   Widget _getPosts(Size deviceSize) {
@@ -162,8 +200,7 @@ class InstaListState extends State<InstaList> {
                               shape: BoxShape.circle,
                               image: new DecorationImage(
                                   fit: BoxFit.fill,
-                                  image: new NetworkImage(
-                                      postsList[index - 1].creator_image)),
+                                  image: new NetworkImage(_defaultImageUrl)),
                             ),
                           ),
                           new SizedBox(
@@ -186,6 +223,20 @@ class InstaListState extends State<InstaList> {
                           timeago.format(DateTime.fromMillisecondsSinceEpoch(
                               postsList[index - 1].post_time)),
                           style: TextStyle(color: Colors.grey)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: <Widget>[
+
+                          Icon(Icons.location_on),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Text(postsList[index - 1].post_location,
+                              style: TextStyle(color: Colors.grey))
+                        ],
+                      ),
                     )
                   ],
                 );

@@ -9,6 +9,7 @@ class postObj {
   List<String> liked_by;
   int post_time;
   String post_caption;
+  String post_location;
 
   postObj(
     this.id,
@@ -18,6 +19,7 @@ class postObj {
     this.liked_by,
     this.post_time,
     this.post_caption,
+    this.post_location,
   );
 
   postObj._({
@@ -28,6 +30,7 @@ class postObj {
     this.liked_by,
     this.post_time,
     this.post_caption,
+    this.post_location,
   });
 
   factory postObj.fromJson(Map<String, dynamic> json) {
@@ -38,6 +41,7 @@ class postObj {
         post_image: json['post_image'],
         post_time: json['post_time'],
         post_caption: json['post_caption'],
+        post_location: json['post_location'],
         liked_by: (json['liked_by'] as List).map((map) => "$map").toList());
   }
 
@@ -47,6 +51,7 @@ class postObj {
         this.creator_image = snap.value["creator_image"],
         this.post_time = snap.value["post_time"],
         this.post_caption = snap.value["post_caption"],
+        this.post_location = snap.value["post_location"],
         this.liked_by = List.from(snap.value['liked_by']),
         this.post_image = snap.value["post_image"];
 
@@ -58,6 +63,7 @@ class postObj {
       "post_image": post_image,
       "post_time": post_time,
       "post_caption": post_caption,
+      "post_location": post_location,
       "liked_by": liked_by,
     };
   }

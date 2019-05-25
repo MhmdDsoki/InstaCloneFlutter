@@ -1,11 +1,12 @@
 class User {
   String id;
-  String name;
   String email;
+  String posts;
+  String name;
   String image;
   String followers = "0";
   String following = "0";
-  String posts;
+
 
   User(this.id, this.email, this.posts, this.name, this.image, this.followers,
       this.following);
@@ -34,11 +35,13 @@ class User {
   Map toMap(User user) {
     var data = Map<String, dynamic>();
     data['id'] = user.id;
-    data['name'] = user.name;
     data['email'] = user.email;
+    data['posts'] = user.posts;
+    data['name'] = user.name;
+    data['image'] = user.image;
     data['followers'] = user.followers;
     data['following'] = user.following;
-    data['posts'] = user.posts;
+
 
     return data;
   }

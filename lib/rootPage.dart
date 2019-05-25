@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/pages/login.dart';
+import 'package:flutter_insta_clone/util/SharedPrefsHelper.dart';
 import 'package:flutter_insta_clone/util/authntication.dart';
 
 import 'app.dart';
@@ -18,6 +19,7 @@ enum AuthStatus { NOT_DETERMINED, NOT_LOGGED_IN, LOGGED_IN, SIGNED_UP }
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
+  bool isLoggedIn = false;
 
   @override
   void initState() {
@@ -48,6 +50,7 @@ class _RootPageState extends State<RootPage> {
     setState(() {
       authStatus = AuthStatus.NOT_LOGGED_IN;
       _userId = "";
+      isLoggedIn=false;
     });
   }
 
@@ -87,32 +90,48 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
-    switch (authStatus) {
-      case AuthStatus.NOT_DETERMINED:
-        return _buildSplashScreen();
-        break;
-      case AuthStatus.NOT_LOGGED_IN:
-        return new LoginPage(
-          auth: widget.auth,
-          onSignedIn: _onLoggedIn,
-        );
-        break;
-      case AuthStatus.SIGNED_UP:
-        return new LoginPage(
-          auth: widget.auth,
-          onSignedIn: _onSignedUp,
-          onSignedUp: _onSignedUp,
-        );
-        break;
-      case AuthStatus.LOGGED_IN:
-        if (_userId.length > 0 && _userId != null) {
-          return new InstaHomeState(
-              userId: _userId, auth: widget.auth, onSignedOut: _onSignedOut);
-        } else
-          return _buildSplashScreen();
-        break;
-      default:
-        return _buildSplashScreen();
+    SharedPreferencesHelper.getUserLoggedIn().then((onValue) {
+      setState(() {
+        this.isLoggedIn = onValue;
+      });
+    });
+    if (isLoggedIn) {
+      return new InstaHomeState(
+          userId: _userId, auth: widget.auth, onSignedOut: _onSignedOut);
+    } else {
+      return new LoginPage(
+        auth: widget.auth,
+        onSignedIn: _onLoggedIn,
+      );
     }
+//    switch (authStatus) {
+//      case AuthStatus.NOT_DETERMINED:
+//        return _buildSplashScreen();
+//        break;
+//      case AuthStatus.NOT_LOGGED_IN:
+//        return new LoginPage(
+//          auth: widget.auth,
+//          onSignedIn: _onLoggedIn,
+//        );
+//        break;
+//      case AuthStatus.SIGNED_UP:
+//        return new LoginPage(
+//          auth: widget.auth,
+//          onSignedIn: _onSignedUp,
+//          onSignedUp: _onSignedUp,
+//        );
+//        break;
+//      case AuthStatus.LOGGED_IN:
+//        if (_userId.length > 0 && _userId != null) {
+//
+//
+//          return new InstaHomeState(
+//              userId: _userId, auth: widget.auth, onSignedOut: _onSignedOut);
+//        } else
+//          return _buildSplashScreen();
+//        break;
+//      default:
+//        return _buildSplashScreen();
+//    }
   }
 }

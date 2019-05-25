@@ -2,12 +2,14 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/db/postservice.dart';
 import 'package:flutter_insta_clone/models/PostObj.dart';
 import 'package:flutter_insta_clone/util/authntication.dart';
+//import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+//import 'package:location/location.dart';
 
 class InstaAddPost extends StatefulWidget {
   @override
@@ -26,10 +28,41 @@ class _InstaAddPostState extends State<InstaAddPost> {
   String _userEmail = "";
   String _imageUrl = "";
   int _time = 0;
+  String _defaultImageUrl = "";
+  String _defaultFollowers = "";
+  //var location = new Location();
+  Map<String, double> currentLocation;
+  String _lat, _long;
+
+  //Position currentLocation1;
+
+//  Future<Map<String, double>> _getLocation() async {
+//    return await location.getLocation();
+//  }
+//
+//  Future<Position> locateUser() async {
+//    return Geolocator()
+//        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//  }
+
+//  getUserLocation() async {
+//    currentLocation1 = await locateUser();
+//    setState(() {
+//      _lat = currentLocation1.latitude as String;
+//      _long = currentLocation1.longitude as String;
+//    });
+//  }
 
   @override
   void initState() {
     super.initState();
+//    getUserLocation();
+//    _getLocation().then((onValue) {
+//      setState(() {
+//        currentLocation = onValue;
+//      });
+//    });
+//
     _time = DateTime.now().millisecondsSinceEpoch;
     _locationController = TextEditingController();
     _captionController = TextEditingController();
@@ -38,7 +71,30 @@ class _InstaAddPostState extends State<InstaAddPost> {
         if (user != null) {
           _userId = user?.uid;
           _userEmail = user?.email;
+          getUsers();
         }
+      });
+    });
+  }
+
+  void getUsers() async {
+    String defaultImageUrl = "";
+
+    FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(_userId)
+        .once()
+        .then((DataSnapshot snapshot) {
+      //here i iterate and create the list of objects
+      Map<dynamic, dynamic> yearMap = snapshot.value;
+      yearMap.forEach((key, value) {
+        setState(() {
+          defaultImageUrl = value['image'];
+        });
+      });
+      setState(() {
+        _defaultImageUrl = defaultImageUrl;
       });
     });
   }
@@ -64,17 +120,18 @@ class _InstaAddPostState extends State<InstaAddPost> {
         if (imageurl != null) {
           _imageUrl = imageurl;
           postObj post = postObj(
-            0,
-            _userEmail,
-            _imageUrl,
-            _imageUrl,
-            ["654", "123", "456", "789"],
-            _time,
-            _captionController.text.toString(),
-          );
+              0,
+              _userEmail,
+              _defaultImageUrl,
+              _imageUrl,
+              ["654", "123", "456", "789"],
+              _time,
+              _captionController.text.toString(),
+              _locationController.text.toString());
           PostService postService = PostService(post.toMap());
           postService.addPost();
           _changeVisibility(true);
+          Navigator.pop(context);
         }
       });
     });
@@ -185,6 +242,34 @@ class _InstaAddPostState extends State<InstaAddPost> {
                       });
                     })),
               ),
+//              Container(
+//                child: currentLocation1 == null
+//                    ? Container(
+//                        width: 250,
+//                        height: 100,
+//                        decoration: new BoxDecoration(
+//                            color: Colors.grey[200],
+//                            borderRadius: new BorderRadius.circular(10.0)),
+//                        child: Row(
+//                          children: <Widget>[
+//                            SizedBox(
+//                              width: 20,
+//                            ),
+//                            CircularProgressIndicator(),
+//                            SizedBox(
+//                              width: 20,
+//                            ),
+//                            Text(
+//                              "Getting location...",
+//                              style: TextStyle(
+//                                  fontSize: 20,
+//                                  color: Colors.black,
+//                                  fontStyle: FontStyle.normal),
+//                            )
+//                          ],
+//                        ))
+//                    : Text("Location:" + _lat + " " + _long),
+//              ),
               Padding(
                 padding: const EdgeInsets.only(top: 50.0),
                 child: Offstage(

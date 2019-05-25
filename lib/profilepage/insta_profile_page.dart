@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/_grid_screen.dart';
 import 'package:flutter_insta_clone/db/userservice.dart';
@@ -32,7 +34,12 @@ class _InstaProfilePageState extends State<InstaProfilePage> {
   String _userId = "";
   String _userEmail = "";
   String _imageUrl = "";
+  String _defaultImageUrl = "";
+  String _defaultFollowers = "";
+  String _defaultFollowing = "";
 
+  DatabaseReference _database ;
+  var _uploaded = true;
   @override
   void initState() {
     super.initState();
@@ -42,11 +49,49 @@ class _InstaProfilePageState extends State<InstaProfilePage> {
         if (user != null) {
           _userId = user?.uid;
           _userEmail = user?.email;
+
+          _getDefaultImage();
         }
       });
     });
+
+
+
+
+  }
+  void getUsers() async {
+
+    String defaultImageUrl="";
+    String defaultFollowers="";
+    String defaultFollowing="";
+
+    FirebaseDatabase.instance
+        .reference()
+        .child("users").child(_userId)
+        .once()
+        .then((DataSnapshot snapshot) {
+      //here i iterate and create the list of objects
+      Map<dynamic, dynamic> yearMap = snapshot.value;
+      yearMap.forEach((key, value) {
+        setState(() {
+          defaultImageUrl =value['image'];
+          defaultFollowers =value['followers'];
+          defaultFollowing =value['following'];
+        });
+      });
+      setState(() {
+        _defaultImageUrl =defaultImageUrl;
+        _defaultFollowers =defaultFollowers;
+        _defaultFollowing =defaultFollowing;
+      });
+
+    });
   }
 
+  void _getDefaultImage() {
+    getUsers();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +131,35 @@ class _InstaProfilePageState extends State<InstaProfilePage> {
                                                   image: new DecorationImage(
                                                       fit: BoxFit.fill,
                                                       image: new NetworkImage(
-                                                          "https://avatars0.githubusercontent.com/u/38107393?s=460&v=4")))),
+                                                          "https://agostini.com/wp-content/uploads/2018/09/pp.png")))),
+            Container(
+            width: 95.0,
+            height: 95.0,
+            decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            image: new DecorationImage(
+            fit: BoxFit.fill,
+            image: new NetworkImage(
+            _defaultImageUrl)))),
                                               Container(
                                               width: 95.0,
                                               height: 95.0,
-                                              child: showImage(),),
+                                               child: showImage(),
+
+
+            ),
+            Container(
+            width: 95.0,
+            height: 95.0,
+            //child: showImage(),
+
+            decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            image: new DecorationImage(
+            fit: BoxFit.fill,
+            image: new NetworkImage(
+            _imageUrl)))
+            ),
                                              Positioned(
                                               right: 5.0,
                                               bottom: 5.0,
@@ -113,7 +182,7 @@ class _InstaProfilePageState extends State<InstaProfilePage> {
                                         height: 15.0,
                                       ),
                                       new Text(
-                                        "muhammad sayed",
+                                        _userEmail,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -150,7 +219,7 @@ class _InstaProfilePageState extends State<InstaProfilePage> {
                                           Column(
                                             children: <Widget>[
                                               Text(
-                                                "313",
+            _defaultFollowers,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 14),
@@ -169,7 +238,7 @@ class _InstaProfilePageState extends State<InstaProfilePage> {
                                           Column(
                                             children: <Widget>[
                                               Text(
-                                                "391",
+                                               _defaultFollowing,
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -246,24 +315,31 @@ class _InstaProfilePageState extends State<InstaProfilePage> {
   }
 _uploadImage(){
   _saveImage().then((imageurl) {
-    setState(() {
-      if (imageurl != null) {
-        _imageUrl = imageurl;
 
+setState(() {
+
+
+      if (imageurl != null) {
+        if(_uploaded){
+          _uploaded=false;
+
+          _imageUrl = imageurl;
         User user = User(
           _userId,
-          "name",
           _userEmail,
+          "posts",
+          "name",
           _imageUrl,
           "0",
-          "0",
-          "posts",
+          "0"
+
         );
+
         UserService postService = UserService(user.toMap(user),_userId);
         postService.addUser();
-        //   _changeVisibility(true);
-      }
-    });
+        // _changeVisibility(true);
+      }}
+});
   });
 }
   _chooseProfileImage(String action) {
@@ -283,33 +359,43 @@ _uploadImage(){
     return await (await uploadTask.onComplete).ref.getDownloadURL();
   }
   Widget showImage() {
+
     return FutureBuilder<File>(
       future: imageFile,
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.data != null) {
 
+          if(_uploaded) {
+            _uploadImage();
 
-          return Image.file(
-            snapshot.data,
-            width: 95,
-            height: 95,
+          }
+          return Container(
+                    decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              image: new DecorationImage(
+                  fit: BoxFit.fill,
+                  image: new FileImage(snapshot.data,
+                       ))),
 
           );
-        } else if (snapshot.error != null) {
+        }
+        else if (snapshot.error != null) {
           return const Text(
-            'Error Picking Image',
+            '',
             textAlign: TextAlign.center,
           );
         } else {
           return const Text(
-            'No Image Selected',
+            '',
             textAlign: TextAlign.center,
           );
         }
       },
     );
   }
+
+
 }
 
 class MyTabsPage extends StatelessWidget {

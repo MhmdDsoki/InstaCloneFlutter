@@ -1,9 +1,7 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_insta_clone/favorite/following_page.dart';
-import 'package:flutter_insta_clone/favorite/you_page.dart';
-import 'package:flutter_insta_clone/insta_body.dart';
 import 'package:flutter_insta_clone/profilepage/insta_profile_page.dart';
-import 'package:flutter_insta_clone/search/insta_search_content.dart';
+import 'package:flutter_insta_clone/util/SharedPrefsHelper.dart';
 import 'package:flutter_insta_clone/util/authntication.dart';
 
 class InstaProfileTaab extends StatefulWidget {
@@ -19,6 +17,12 @@ class InstaProfileTaab extends StatefulWidget {
 
 class _InstaProfileTaabState extends State<InstaProfileTaab> {
   String currentUserEmail = "";
+  String _userId = "";
+  String _userEmail = "";
+  String _imageUrl = "";
+  String _defaultImageUrl = "";
+  String _defaultFollowers = "";
+  String _defaultFollowing = "";
 
   @override
   void initState() {
@@ -27,6 +31,8 @@ class _InstaProfileTaabState extends State<InstaProfileTaab> {
       setState(() {
         if (user != null) {
           currentUserEmail = user?.email;
+          _userId = user?.uid;
+          _getDefaultImage();
         }
       });
     });
@@ -75,11 +81,44 @@ class _InstaProfileTaabState extends State<InstaProfileTaab> {
 
   _signOut() async {
     try {
+      SharedPreferencesHelper.setUserLoggedOut();
       await widget.auth.signOut();
       widget.onSignedOut();
     } catch (e) {
       print(e);
     }
+  }
+
+  void getUsers() async {
+    String defaultImageUrl = "";
+    String defaultFollowers = "";
+    String defaultFollowing = "";
+
+    FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(_userId)
+        .once()
+        .then((DataSnapshot snapshot) {
+      //here i iterate and create the list of objects
+      Map<dynamic, dynamic> yearMap = snapshot.value;
+      yearMap.forEach((key, value) {
+        setState(() {
+          defaultImageUrl = value['image'];
+          defaultFollowers = value['followers'];
+          defaultFollowing = value['following'];
+        });
+      });
+      setState(() {
+        _defaultImageUrl = defaultImageUrl;
+        _defaultFollowers = defaultFollowers;
+        _defaultFollowing = defaultFollowing;
+      });
+    });
+  }
+
+  void _getDefaultImage() {
+    getUsers();
   }
 
   void _settingModalBottomSheet(context) {
@@ -120,15 +159,28 @@ class _InstaProfileTaabState extends State<InstaProfileTaab> {
                           children: <Widget>[
                             Row(
                               children: <Widget>[
-                                Container(
-                                    width: 60.0,
-                                    height: 60.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: new NetworkImage(
-                                                "https://avatars0.githubusercontent.com/u/38107393?s=460&v=4")))),
+                                Stack(
+                                  children: <Widget>[
+                                    Container(
+                                        width: 60.0,
+                                        height: 60.0,
+                                        decoration: new BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: new DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: new NetworkImage(
+                                                    "https://agostini.com/wp-content/uploads/2018/09/pp.png")))),
+                                    Container(
+                                        width: 60.0,
+                                        height: 60.0,
+                                        decoration: new BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: new DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: new NetworkImage(
+                                                    _defaultImageUrl)))),
+                                  ],
+                                ),
                                 new SizedBox(
                                   width: 15,
                                 ),
@@ -158,13 +210,22 @@ class _InstaProfileTaabState extends State<InstaProfileTaab> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: OutlineButton(
+                                child: OutlineButton.icon(
                                   shape: new RoundedRectangleBorder(
                                       borderRadius:
                                           new BorderRadius.circular(30.0)),
                                   onPressed: () {},
-                                  child: Text("313 Followers"),
+                                  icon: Container(
+                                    child: Center(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text(_defaultFollowers),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                   textColor: Colors.black,
+                                  label: Text("Followers"),
                                 ),
                               ),
                             ),

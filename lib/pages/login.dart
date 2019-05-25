@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseUser;
 import 'package:flutter/material.dart';
 import 'package:flutter_insta_clone/signup/signupPage.dart';
+import 'package:flutter_insta_clone/util/SharedPrefsHelper.dart';
 import 'package:flutter_insta_clone/util/authntication.dart';
-import 'dart:async';
-
-import '../app.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.auth, this.onSignedIn, this.onSignedUp});
@@ -40,11 +40,20 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
     getUser().then((user) {
       if (user != null) {
         // send the user to the home page
         widget.onSignedIn();
       }
+    });
+  }
+
+  bool _visibility = true;
+
+  void _changeVisibility(bool visibility) {
+    setState(() {
+      _visibility = visibility;
     });
   }
 
@@ -115,6 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text("Log in"),
                   textColor: Colors.grey[200],
                   onPressed: () {
+                    _changeVisibility(false);
+
                     signInWithEmail();
                   },
                 ),
@@ -173,13 +184,13 @@ class _LoginPageState extends State<LoginPage> {
                             height: 20,
                             width: 20,
                             child: Image.asset(
-                              'assets/images/fblogo.png',
+                              'assets/images/google_icon.png',
                               color: Colors.white,
                             )),
                       ),
                     ),
                     Text(
-                      " Log in with facebook",
+                      " Log in with Google",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
@@ -245,25 +256,55 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Scaffold(
-          body: new Container(
-            decoration: new BoxDecoration(
-              gradient: new LinearGradient(
-                  colors: [
-                    Colors.green[200],
-                    Colors.blue[200],
-                  ],
-                  begin: const FractionalOffset(0.0, 0.0),
-                  end: const FractionalOffset(0.1, 1.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp),
+    return Material(
+      child: Center(
+        child: Stack(
+          children: <Widget>[
+            Scaffold(
+              body: new Container(
+                decoration: new BoxDecoration(
+                  gradient: new LinearGradient(
+                      colors: [
+                        Colors.green[200],
+                        Colors.blue[200],
+                      ],
+                      begin: const FractionalOffset(0.0, 0.0),
+                      end: const FractionalOffset(0.1, 1.0),
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp),
+                ),
+                child: _getContent() /* add child content here */,
+              ),
             ),
-            child: _getContent() /* add child content here */,
-          ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 50.0),
+                child: Offstage(
+                  child: Container(
+                      width: 250,
+                      height: 100,
+                      decoration: new BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: new BorderRadius.circular(20.0)),
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 20,
+                          ),
+                          CircularProgressIndicator(),
+                          SizedBox(
+                            width: 20,
+                          )
+                          ,Text("Loading...",style: TextStyle(fontSize: 20,color: Colors.black,fontStyle: FontStyle.normal),)
+                        ],
+                      )),
+                  offstage: _visibility,
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -278,7 +319,14 @@ class _LoginPageState extends State<LoginPage> {
         .signIn(_usernameController.text, _passwordController.text);
     if (userId.length > 0 && userId != null) {
       widget.onSignedIn();
+      _changeVisibility(true);
+       SharedPreferencesHelper.setUserLoggedIn();
       print('Signed in: $userId');
+    }else{
+      _changeVisibility(true);
+      Scaffold.of(context).showSnackBar(new SnackBar(
+        content: new Text("Error finding such a user"),
+      ));
     }
   }
 }
